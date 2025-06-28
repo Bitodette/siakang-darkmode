@@ -32,6 +32,7 @@
         .text-muted, .sub-header {
             color: ${secondaryText} !important;
         }
+
         a, a:hover {
             color: #fff !important;
         }
@@ -44,6 +45,7 @@
         .breadcrumb-item+.breadcrumb-item::before {
             color: ${secondaryText} !important;
         }
+
         .card, .card-body, .card-header, .modal-content, .dropdown-menu {
             background-color: ${secondaryBg} !important;
             color: ${primaryText} !important;
@@ -70,13 +72,16 @@
         hr {
             background-color: ${primaryBorder} !important;
         }
+
         .navbar-custom, .left-side-menu {
             background-color: ${secondaryBg} !important;
             border-bottom: 1px solid ${primaryBorder} !important;
         }
+
         body[data-leftbar-color="dark"]:not([data-layout-mode="detached"]) .logo-box {
-            background-color: #2d2d2d;
+            background-color: #2d2d2d !important;
         }
+
         #sidebar-menu .nav-link {
              color: ${primaryText} !important;
         }
@@ -94,58 +99,73 @@
             color: ${primaryAccent} !important;
             opacity: 0.8 !important;
         }
+
         .left-side-menu {
             position: fixed !important;
             height: 100vh !important;
             top: 70px !important;
             overflow-y: auto !important;
         }
+
         body[data-leftbar-size='condensed'] .logo-box {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100%;
         }
+
         .content-page {
             margin-left: 250px !important;
             transition: margin-left .2s !important;
         }
+
         body[data-leftbar-size='condensed'] .content-page {
             margin-left: 70px !important;
         }
+
         #sidebar-menu .menu-title.side-menu-list:last-of-type {
             display: none !important;
         }
+
         .navbar-custom .topnav-menu.float-end li.dropdown.topbar-dropdown:has(img[alt="user-image"][height="16"]) {
              display: none !important;
         }
+
         .navbar-custom .topnav-menu.float-end li.dropdown.topbar-dropdown:has(span:contains("id"), span:contains("en")):not(:has(i.bi-shield-lock-fill)):not(:has(i.bi-calendar-heart-fill)) {
             display: none !important;
         }
+
         .navbar-custom .nav-link.nav-user .rounded-circle.img-fill {
             display: none !important;
         }
+
+
         table, table th, table td {
             color: ${primaryText} !important;
             border-color: ${primaryBorder} !important;
         }
+
         thead, thead th {
             background-color: ${tertiaryBg} !important;
             color: ${primaryText} !important;
         }
+
         tbody, tbody tr {
             background-color: ${secondaryBg} !important;
         }
+
         tbody tr:nth-of-type(even) {
             background-color: ${secondaryBg} !important;
         }
         tbody tr:nth-of-type(odd) {
             background-color: ${primaryBg} !important;
         }
+
         .dataTables_wrapper .dataTables_info,
         .dataTables_wrapper .dataTables_paginate .paginate_button {
             color: ${secondaryText} !important;
         }
+
         .dataTables_wrapper .dataTables_filter input {
             background-color: ${tertiaryBg} !important;
             color: ${primaryText} !important;
@@ -180,9 +200,16 @@
     const manageBodyAttributes = () => {
         const body = document.body;
         if (body) {
-            body.setAttribute('data-theme', 'dark');
-            body.setAttribute('data-topbar-color', 'dark');
-            body.setAttribute('data-leftbar-color', 'dark');
+            if (body.getAttribute('data-theme') !== 'dark') {
+                body.setAttribute('data-theme', 'dark');
+            }
+            if (body.getAttribute('data-topbar-color') !== 'dark') {
+                body.setAttribute('data-topbar-color', 'dark');
+            }
+            if (body.getAttribute('data-leftbar-color') !== 'dark') {
+                body.setAttribute('data-leftbar-color', 'dark');
+            }
+
             const currentLeftbarSize = body.getAttribute('data-leftbar-size');
             if (currentLeftbarSize) {
                 localStorage.setItem(SIDEBAR_STATUS_KEY, currentLeftbarSize);
@@ -205,9 +232,11 @@
 
     const hideEmptyPascaperkuliahanMenu = () => {
         const pascaLi = document.querySelector('#sidebar-menu .menu-title.side-menu-list:has(span:contains("Pascaperkuliahan"))');
+
         if (pascaLi) {
             let nextSibling = pascaLi.nextElementSibling;
             let hasSubmenu = false;
+
             while (nextSibling && !nextSibling.classList.contains('menu-title')) {
                 if ((nextSibling.tagName === 'LI' || nextSibling.tagName === 'UL') && nextSibling.querySelector('a')) {
                      hasSubmenu = true;
@@ -215,9 +244,11 @@
                 }
                 nextSibling = nextSibling.nextElementSibling;
             }
+
             if (!hasSubmenu) {
                 pascaLi.style.display = 'none';
             }
         }
     };
+
 })();
