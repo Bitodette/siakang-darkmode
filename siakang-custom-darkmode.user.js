@@ -2,7 +2,7 @@
 // @name          Siakang Custom Dark Mode
 // @namespace     http://tampermonkey.net/
 // @version       1.0
-// @description   Menerapkan darkmode kustom untuk Siakang Untirta dengan optimisasi UI.
+// @description   Menerapkan tema gelap kustom untuk Siakang Untirta dan optimisasi UI.
 // @author        Bitodette
 // @match         https://siakang.untirta.ac.id/*
 // @grant         GM_addStyle
@@ -44,7 +44,6 @@
         .breadcrumb-item+.breadcrumb-item::before {
             color: ${secondaryText} !important;
         }
-
         .card, .card-body, .card-header, .modal-content, .dropdown-menu {
             background-color: ${secondaryBg} !important;
             color: ${primaryText} !important;
@@ -71,7 +70,6 @@
         hr {
             background-color: ${primaryBorder} !important;
         }
-
         .navbar-custom, .left-side-menu {
             background-color: ${secondaryBg} !important;
             border-bottom: 1px solid ${primaryBorder} !important;
@@ -96,7 +94,6 @@
             color: ${primaryAccent} !important;
             opacity: 0.8 !important;
         }
-
         .left-side-menu {
             position: fixed !important;
             height: 100vh !important;
@@ -116,24 +113,18 @@
         body[data-leftbar-size='condensed'] .content-page {
             margin-left: 70px !important;
         }
-
-        /* Menyembunyikan menu "System Setting" */
         #sidebar-menu .menu-title.side-menu-list:last-of-type {
             display: none !important;
         }
-
-        /* Navbar Cleanup: Menyembunyikan opsi "Ubah Bahasa" */
         .navbar-custom .topnav-menu.float-end li.dropdown.topbar-dropdown:has(img[alt="user-image"][height="16"]) {
              display: none !important;
         }
         .navbar-custom .topnav-menu.float-end li.dropdown.topbar-dropdown:has(span:contains("id"), span:contains("en")):not(:has(i.bi-shield-lock-fill)):not(:has(i.bi-calendar-heart-fill)) {
             display: none !important;
         }
-        /* Navbar Cleanup: Menyembunyikan foto mahasiswa (user-image) */
         .navbar-custom .nav-link.nav-user .rounded-circle.img-fill {
             display: none !important;
         }
-
         table, table th, table td {
             color: ${primaryText} !important;
             border-color: ${primaryBorder} !important;
@@ -192,7 +183,6 @@
             body.setAttribute('data-theme', 'dark');
             body.setAttribute('data-topbar-color', 'dark');
             body.setAttribute('data-leftbar-color', 'dark');
-
             const currentLeftbarSize = body.getAttribute('data-leftbar-size');
             if (currentLeftbarSize) {
                 localStorage.setItem(SIDEBAR_STATUS_KEY, currentLeftbarSize);
@@ -215,11 +205,9 @@
 
     const hideEmptyPascaperkuliahanMenu = () => {
         const pascaLi = document.querySelector('#sidebar-menu .menu-title.side-menu-list:has(span:contains("Pascaperkuliahan"))');
-
         if (pascaLi) {
             let nextSibling = pascaLi.nextElementSibling;
             let hasSubmenu = false;
-
             while (nextSibling && !nextSibling.classList.contains('menu-title')) {
                 if ((nextSibling.tagName === 'LI' || nextSibling.tagName === 'UL') && nextSibling.querySelector('a')) {
                      hasSubmenu = true;
@@ -227,11 +215,9 @@
                 }
                 nextSibling = nextSibling.nextElementSibling;
             }
-
             if (!hasSubmenu) {
                 pascaLi.style.display = 'none';
             }
         }
     };
-
 })();
