@@ -1,67 +1,33 @@
-# Siakang Custom Dark Mode (Tampermonkey UserScript)
+# Siakang Custom Dark Mode
 
-**Siakang Custom Dark Mode** adalah userscript Tampermonkey yang menerapkan tema gelap kustom dengan tampilan lebih modern dan rapi untuk [Siakang Untirta](https://siakang.untirta.ac.id/). Script ini melakukan penyesuaian warna secara menyeluruh pada antarmuka, menyembunyikan elemen yang mengganggu, serta mengingat preferensi sidebar agar pengalaman pengguna lebih nyaman.
-
----
+Siakang Custom Dark Mode adalah userscript Tampermonkey untuk menerapkan tema gelap dan optimalisasi UI pada [Siakang Untirta](https://siakang.untirta.ac.id/).
 
 ## Fitur
 
-- 🌑 **Tema Gelap Menyeluruh**  
-  Mengubah seluruh tampilan Siakang ke mode dark yang konsisten, termasuk latar, teks, tabel, navbar, sidebar, dialog, hingga tombol dan pagination.
-- 🧹 **UI Lebih Bersih**  
-  Menyembunyikan beberapa menu dan elemen seperti menu "System Setting", opsi "Ubah Bahasa", serta foto profil mahasiswa di navbar.
-- 🧠 **Sidebar Pintar**  
-  Preferensi ukuran sidebar (penuh atau condensed) otomatis disimpan dan diterapkan kembali saat reload halaman.
-- 🗄️ **Tabel Lebih Nyaman Dibaca**  
-  Tabel dan datatables tampil gelap, rapi, serta warna baris selang-seling.
-- 🎛️ **Penyesuaian Otomatis**  
-  Script tetap berjalan walau ada perubahan DOM (AJAX, SPA, dsb).
+- Tema gelap menyeluruh pada seluruh elemen utama situs.
+- Penyesuaian warna teks dan latar pada tabel, navbar, sidebar, dan komponen lain.
+- Menyembunyikan menu dan elemen yang tidak berguna (seperti, "System Setting", opsi "Ubah Bahasa", foto profil di navbar).
+- Preferensi ukuran sidebar disimpan menggunakan local storage agar tetap konsisten setiap reload halaman.
 
----
+## Instalasi
 
-## Cara Instalasi
+1. **Pasang Tampermonkey**  
+   Tambahkan ekstensi [Tampermonkey](https://tampermonkey.net/) pada browser Anda.
 
-1. **Pasang [Tampermonkey](https://tampermonkey.net/)**  
-   Install ekstensi Tampermonkey di browser Anda.
+2. **Pasang Userscript**  
+   - Unduh atau copy file `siakang-custom-darkmode.user.js` ke Tampermonkey.
+   - Pastikan script diaktifkan untuk domain: `https://siakang.untirta.ac.id/*`
 
-2. **Install Script**  
-   - Klik [di sini untuk install](https://github.com/Bitodette/siakang-darkmode/raw/main/siakang-custom-darkmode.user.js) (atau copy kode pada file `siakang-custom-darkmode.user.js` ke Tampermonkey).
-   - Pastikan script aktif untuk domain: `https://siakang.untirta.ac.id/*`.
+3. **Refresh Halaman**  
+   Segarkan (refresh) halaman Siakang untuk melihat tampilan baru.
 
-3. **Refresh Siakang**  
-   Setelah script aktif, refresh halaman Siakang. Tema gelap akan langsung diterapkan.
+## Catatan
 
----
-
-## Perhatian & Catatan
-
-- Script ini **tidak mengubah/memodifikasi data** apapun di Siakang, hanya mengubah tampilan di sisi browser Anda.
-- Jika ada elemen yang tidak tampil sempurna, silakan laporkan melalui [issue GitHub](https://github.com/Bitodette/siakang-darkmode/issues) atau hubungi penulis.
-
----
-
-## Cuplikan Kode Utama
-
-```javascript
-// ==UserScript==
-// @name          Siakang Custom Dark Mode
-// @namespace     http://tampermonkey.net/
-// @version       1.0
-// @description   Menerapkan tema gelap kustom untuk Siakang Untirta dengan UI yang lebih rapi.
-// @author        Bitodette
-// @match         https://siakang.untirta.ac.id/*
-// @grant         GM_addStyle
-// @run-at        document-start
-// ==/UserScript==
-
-// ... (lihat file utama untuk kode lengkap)
-```
-
----
+- Script ini hanya memodifikasi tampilan di sisi browser, tidak mengubah data pada Siakang.
+- Jika ada tampilan yang tidak sesuai, silakan laporkan melalui [GitHub Issues](https://github.com/Bitodette/siakang-darkmode/issues).
 
 ## Kontribusi
 
-Masukan, saran, atau pull request sangat diterima!  
-Jangan ragu untuk fork repository ini dan submit perubahan.
+Kontribusi sangat terbuka. Silakan fork dan ajukan pull request jika ingin menambah atau memperbaiki fitur.
 
 ---
