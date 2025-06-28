@@ -230,25 +230,5 @@
         hideEmptyPascaperkuliahanMenu();
     }).observe(document.documentElement, { childList: true, subtree: true });
 
-    const hideEmptyPascaperkuliahanMenu = () => {
-        const pascaLi = document.querySelector('#sidebar-menu .menu-title.side-menu-list:has(span:contains("Pascaperkuliahan"))');
-
-        if (pascaLi) {
-            let nextSibling = pascaLi.nextElementSibling;
-            let hasSubmenu = false;
-
-            while (nextSibling && !nextSibling.classList.contains('menu-title')) {
-                if ((nextSibling.tagName === 'LI' || nextSibling.tagName === 'UL') && nextSibling.querySelector('a')) {
-                     hasSubmenu = true;
-                     break;
-                }
-                nextSibling = nextSibling.nextElementSibling;
-            }
-
-            if (!hasSubmenu) {
-                pascaLi.style.display = 'none';
-            }
-        }
-    };
 
 })();
