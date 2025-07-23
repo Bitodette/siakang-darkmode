@@ -6,8 +6,8 @@
 // @author       Bitodette
 // @match        https://siakang.untirta.ac.id/*
 // @grant        GM_addStyle
-// @updateURL    https://raw.githubusercontent.com/Bitodette/siakang-darkmode/main/siakang-custom-darkmode.user.js
-// @downloadURL  https://raw.githubusercontent.com/Bitodette/siakang-darkmode/main/siakang-custom-darkmode.user.js
+// @updateURL    https://raw.githubusercontent.com/Bitodette/siakang-darkmode/main/siakang-darkmode.js
+// @downloadURL  https://raw.githubusercontent.com/Bitodette/siakang-darkmode/main/siakang-darkmode.js
 // @run-at       document-start
 // ==/UserScript==
 
