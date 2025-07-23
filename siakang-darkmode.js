@@ -332,27 +332,6 @@
         }
     }).observe(document.documentElement, { childList: true, subtree: true });
 
-    function autoLogin() {
-        const email = 'EMAIL_DIHAPUS';
-        const password = 'PASSWORD_DIHAPUS';
-
-        if (window.location.href.includes('https://siakang.untirta.ac.id/auth/login')) {
-            const emailField = document.querySelector('input[name="email"]');
-            const passwordField = document.querySelector('input[name="password"]');
-            const loginButton = document.querySelector('button[type="submit"].btn-submit');
-
-            if (emailField && passwordField && loginButton) {
-                emailField.value = email;
-                passwordField.value = password;
-                emailField.dispatchEvent(new Event('input', { bubbles: true }));
-                emailField.dispatchEvent(new Event('change', { bubbles: true }));
-                passwordField.dispatchEvent(new Event('input', { bubbles: true }));
-                passwordField.dispatchEvent(new Event('change', { bubbles: true }));
-                loginButton.click();
-            }
-        }
-    }
-
     // Redirect to dashboard.
     function redirectAfterLogin() {
         if (window.location.pathname === '/home') {
@@ -396,7 +375,6 @@
 
     // Run redirect and footer
     window.addEventListener('DOMContentLoaded', () => {
-        autoLogin();
         redirectAfterLogin();
         modifyFooter();
     });
