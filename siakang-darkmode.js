@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Siakang Dark Mode
 // @namespace    http://tampermonkey.net/
-// @version      2.0
+// @version      2.1
 // @description  Dark Mode untuk Siakang Untirta.
 // @author       Bitodette
 // @match        https://siakang.untirta.ac.id/*
@@ -59,7 +59,7 @@
             margin-bottom: 0.5rem !important;
         }
 
-        // Disable hover-lift effect on some dashboard cards
+        /* Disable hover-lift effect on some dashboard cards */
         .info-card-custom, .password-card {
             box-shadow: none !important;
             transition: none !important;
@@ -69,9 +69,39 @@
             transform: none !important;
         }
 
-        // Fix the hover effect on announcement items (blank white)
+        /* Fix the hover effect on announcement items (blank white) */
         .announcement-item-custom:hover {
             background-color: ${tertiaryBg} !important;
+        }
+
+        /* Chart (ApexCharts) Fixes */
+        .apexcharts-tooltip.apexcharts-theme-light {
+            background: ${tertiaryBg} !important;
+            border: 1px solid ${primaryBorder} !important;
+        }
+        .apexcharts-tooltip.apexcharts-theme-light .apexcharts-tooltip-title {
+            background: ${secondaryBg} !important;
+            border-bottom: 1px solid ${primaryBorder} !important;
+            color: ${primaryText} !important;
+        }
+        .apexcharts-tooltip-text-value, .apexcharts-tooltip-text-z-value {
+            color: ${primaryText} !important;
+        }
+        .apexcharts-tooltip-text-y-label {
+            color: ${secondaryText} !important;
+        }
+        .apexcharts-xaxis-label, .apexcharts-yaxis-label {
+            fill: ${secondaryText} !important;
+        }
+        .apexcharts-gridline {
+            display: none !important; /* Hides distracting grid lines */
+        }
+        .apexcharts-datalabels-group text {
+            fill: #fff !important;
+            stroke: ${secondaryBg};
+            stroke-width: 5px;
+            stroke-opacity: 1;
+            paint-order: stroke;
         }
 
         .form-control, .form-control:focus {
@@ -113,7 +143,7 @@
             border-bottom: 1px solid ${primaryBorder} !important;
         }
 
-        //Sidebar & Logo
+        /* Sidebar & Logo */
         .logo-box {
              border-bottom: 1px solid ${primaryBorder} !important;
              display: flex !important;
@@ -156,7 +186,7 @@
             opacity: 0.8 !important;
         }
 
-        // Hide unnecessary menu
+        /* Hide unnecessary menu */
         #sidebar-menu .menu-title.side-menu-list:last-of-type,
         li.topbar-dropdown:has(img[src*="/images/flags/"]) {
             display: none !important;
@@ -178,6 +208,7 @@
 
         tbody tr:nth-of-type(even) { background-color: ${secondaryBg} !important; }
         tbody tr:nth-of-type(odd) { background-color: ${primaryBg} !important; }
+
         .dataTables_wrapper .dataTables_info,
         .dataTables_wrapper .dataTables_paginate .paginate_button {
             color: ${secondaryText} !important;
@@ -205,7 +236,7 @@
             background-color: ${tertiaryBg} !important;
         }
 
-        //Responsive Fixes
+        /* Responsive Fixes */
         @media (min-width: 992px) {
             .left-side-menu {
                 position: fixed !important;
@@ -301,6 +332,27 @@
         }
     }).observe(document.documentElement, { childList: true, subtree: true });
 
+    function autoLogin() {
+        const email = 'EMAIL_DIHAPUS';
+        const password = 'PASSWORD_DIHAPUS';
+
+        if (window.location.href.includes('https://siakang.untirta.ac.id/auth/login')) {
+            const emailField = document.querySelector('input[name="email"]');
+            const passwordField = document.querySelector('input[name="password"]');
+            const loginButton = document.querySelector('button[type="submit"].btn-submit');
+
+            if (emailField && passwordField && loginButton) {
+                emailField.value = email;
+                passwordField.value = password;
+                emailField.dispatchEvent(new Event('input', { bubbles: true }));
+                emailField.dispatchEvent(new Event('change', { bubbles: true }));
+                passwordField.dispatchEvent(new Event('input', { bubbles: true }));
+                passwordField.dispatchEvent(new Event('change', { bubbles: true }));
+                loginButton.click();
+            }
+        }
+    }
+
     // Redirect to dashboard.
     function redirectAfterLogin() {
         if (window.location.pathname === '/home') {
@@ -344,6 +396,7 @@
 
     // Run redirect and footer
     window.addEventListener('DOMContentLoaded', () => {
+        autoLogin();
         redirectAfterLogin();
         modifyFooter();
     });
