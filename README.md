@@ -15,7 +15,7 @@ Siakang Custom Dark Mode adalah userscript Tampermonkey untuk menerapkan tema ge
    Tambahkan ekstensi [Tampermonkey](https://tampermonkey.net/) pada browser Anda.
 
 2. **Pasang Userscript**  
-   - Unduh atau copy file `siakang-custom-darkmode.user.js` ke Tampermonkey.
+   - Unduh atau copy file `siakang-darkmode.js` ke Tampermonkey.
    - Pastikan script diaktifkan untuk domain: `https://siakang.untirta.ac.id/*`
 
 3. **Refresh Halaman**  
