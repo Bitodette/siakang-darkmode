@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Siakang Dark Mode
 // @namespace    http://tampermonkey.net/
-// @version      3.1
+// @version      3.2
 // @description  Dark Mode untuk Siakang Untirta.
 // @author       Bitodette
 // @match        https://siakang.untirta.ac.id/*
