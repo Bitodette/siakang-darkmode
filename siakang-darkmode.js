@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Siakang Dark Mode
 // @namespace    http://tampermonkey.net/
-// @version      3.4
+// @version      3.5
 // @description  Dark Mode untuk Siakang Untirta.
-// @author       Bitodette (modified by Gemini)
+// @author       Bitodette
 // @match        https://siakang.untirta.ac.id/*
 // @grant        GM_addStyle
 // @run-at       document-start
@@ -45,7 +45,7 @@
             font-weight: normal !important;
             text-transform: uppercase !important;
             line-height: 1 !important;
-            letter-spacing: 1px !important; 
+            letter-spacing: 1px !important;
         }
 
         @media (min-width: 992px) {
@@ -83,7 +83,10 @@
         .logo-box { border-bottom: 1px solid ${darkPalette.primaryBorder} !important; display: flex !important; justify-content: center !important; align-items: center !important; height: 70px !important; }
         body[data-leftbar-color="dark"]:not([data-layout-mode="detached"]) .logo-box { background-color: #2d2d2d !important; }
         #side-menu li a { color: ${darkPalette.primaryText} !important; }
-        #side-menu li a.active, #side-menu li a:hover { background-color: ${darkPalette.primaryAccent} !important; color: #fff !important; border-radius: 4px; }
+        #side-menu li a.active, #side-menu li a:hover {
+            background-color: #464646 !important;
+            color: #fff !important;
+        }
         .logo-box p, .button-menu-mobile i { color: #fff !important; }
         .logo-box .logo-lg p { margin: 0 !important; }
         .button-menu-mobile { width: 45px !important; }
@@ -101,7 +104,6 @@
         .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current) { background-color: ${darkPalette.tertiaryBg} !important; }
         @media (min-width: 992px) { .left-side-menu { position: fixed !important; height: 100vh !important; top: 70px !important; overflow-y: auto !important; } .content-page { transition: margin-left .2s !important; } body[data-leftbar-size='condensed'] .content-page { margin-left: 70px !important; } }
         @media (max-width: 991.98px) { .content-page { margin-left: 0 !important; } .left-side-menu { position: fixed !important; top: 70px !important; height: calc(100vh - 70px) !important; z-index: 1050 !important; } }
-        /* === PENYESUAIAN HALAMAN LOGIN (TAMBAHAN) === */
         .authentication-bg { background-color: ${darkPalette.primaryBg} !important; background-size: cover !important; background-position: center !important; min-height: 100vh !important; }
         .mt-5 { margin-top: 0 !important; margin-bottom: 0 !important; }
         .col-md-8.col-lg-6.col-xl-4 { margin-top: 4.5rem !important; }
@@ -130,7 +132,10 @@
         .logo-box { border-bottom: 1px solid ${lightPalette.primaryBorder} !important; display: flex !important; justify-content: center !important; align-items: center !important; height: 70px !important; }
         body:not([data-leftbar-size='condensed']) .logo-box .logo-lg { display: flex !important; justify-content: center !important; align-items: center !important; width: 100% !important; }
         #side-menu li a { color: ${lightPalette.primaryText} !important; }
-        #side-menu li a.active, #side-menu li a:hover { background-color: ${lightPalette.primaryAccent} !important; color: #fff !important; border-radius: 4px; }
+        #side-menu li a.active, #side-menu li a:hover {
+            background-color: #e7e7e7ff !important;
+            color: #1e1e1e !important;
+        }
         .logo-box p { color: ${lightPalette.primaryText} !important; }
         .button-menu-mobile i { color: ${lightPalette.secondaryText} !important; }
         .logo-box .logo-lg p { margin: 0 !important; }
@@ -148,7 +153,6 @@
         .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current) { background-color: ${lightPalette.tertiaryBg} !important; }
         @media (min-width: 992px) { .left-side-menu { position: fixed !important; height: 100vh !important; top: 70px !important; overflow-y: auto !important; } .content-page { transition: margin-left .2s !important; } body[data-leftbar-size='condensed'] .content-page { margin-left: 70px !important; } }
         @media (max-width: 991.98px) { .content-page { margin-left: 0 !important; } .left-side-menu { position: fixed !important; top: 70px !important; height: calc(100vh - 70px) !important; z-index: 1050 !important; } }
-        /* === PENYESUAIAN HALAMAN LOGIN (TAMBAHAN) === */
         .authentication-bg { background-color: ${lightPalette.primaryBg} !important; background-size: cover !important; background-position: center !important; min-height: 100vh !important; }
         .mt-5 { margin-top: 0 !important; margin-bottom: 0 !important; }
         .col-md-8.col-lg-6.col-xl-4 { margin-top: 4.5rem !important; }
