@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Siakang Dark Mode
 // @namespace    http://tampermonkey.net/
-// @version      3.3
-// @description  Dark Mode untuk Siakang Untirta    .
-// @author       Bitodette
+// @version      3.4
+// @description  Dark Mode untuk Siakang Untirta.
+// @author       Bitodette (modified by Gemini)
 // @match        https://siakang.untirta.ac.id/*
 // @grant        GM_addStyle
 // @run-at       document-start
@@ -26,8 +26,28 @@
     };
 
     const permanentCss = `
+        @font-face {
+            font-family: 'Striper';
+            src: url('https://cdn.jsdelivr.net/gh/Bitodette/siakang-darkmode@main/font/Striper-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         #sidebar-menu .menu-title.side-menu-list:last-of-type,
         li.topbar-dropdown:has(img[src*="/images/flags/"]) { display: none !important; }
+
+        .logo-box .logo-lg p {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            font-family: 'Striper', sans-serif !important;
+            font-size: 30px !important;
+            font-weight: normal !important;
+            text-transform: uppercase !important;
+            line-height: 1 !important;
+            letter-spacing: 1px !important; 
+        }
+
         @media (min-width: 992px) {
             .navbar-custom .nav-link.nav-user .rounded-circle.img-fill { display: none !important; }
         }
@@ -154,35 +174,25 @@
     const darkModeMatcher = window.matchMedia('(prefers-color-scheme: dark)');
     darkModeMatcher.addEventListener('change', event => applyTheme(event.matches));
 
-    /**
-     * FUNGSI YANG DIPERBAIKI TOTAL: Menggunakan selector yang benar untuk JS dan CSS.
-     */
     function highlightActiveSidebarLink() {
         setTimeout(() => {
             const currentPath = window.location.pathname;
-            // KUNCI PERBAIKAN 1: Menggunakan selector yang benar sesuai HTML.
             const sidebarLinks = document.querySelectorAll('#side-menu li a');
-
-            // Reset status aktif dari eksekusi sebelumnya
             document.querySelectorAll('#side-menu li a.active').forEach(el => el.classList.remove('active'));
-
             let bestMatch = null;
             let longestMatchLength = 0;
-
             sidebarLinks.forEach(link => {
                 if (!link.href || link.href.includes('javascript:')) return;
                 try {
                     let linkPath = new URL(link.href).pathname;
                     if (linkPath === '/home') linkPath = '/dashboard/dashboard-akademik';
                     if (linkPath === '/' && currentPath !== '/home' && currentPath !== '/') return;
-
                     if (currentPath.startsWith(linkPath) && linkPath.length > longestMatchLength) {
                         longestMatchLength = linkPath.length;
                         bestMatch = link;
                     }
-                } catch (e) { /* Abaikan link error */ }
+                } catch (e) {}
             });
-
             if (bestMatch) {
                 bestMatch.classList.add('active');
             }
