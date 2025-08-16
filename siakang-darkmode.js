@@ -41,7 +41,7 @@
             align-items: center !important;
             gap: 10px !important;
             font-family: 'Striper', sans-serif !important;
-            font-size: 30px !important;
+            font-size: 25px !important;
             font-weight: normal !important;
             text-transform: uppercase !important;
             line-height: 1 !important;
