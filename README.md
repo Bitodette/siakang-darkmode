@@ -22,7 +22,9 @@
 
 **Siakang Dark Mode** is a Tampermonkey userscript designed to enhance the user experience on [Siakang Untirta](https://siakang.untirta.ac.id/) by applying a consistent dark theme and optimizing the user interface. This script aims to reduce eye strain during late-night study sessions and declutter the interface for better focus.
 
-![Siakang Dark Mode Screenshot](images/Screenshot.png) ---
+![Siakang Dark Mode Screenshot](images/Screenshot.png) 
+
+---
 
 ## Features
 
