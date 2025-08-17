@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         Siakang Dark Mode
 // @namespace    http://tampermonkey.net/
-// @version      3.5
+// @version      4.0
 // @description  Dark Mode untuk Siakang Untirta.
 // @author       Bitodette
 // @match        https://siakang.untirta.ac.id/*
 // @grant        GM_addStyle
 // @run-at       document-start
+// @icon         https://siakang.untirta.ac.id/myunnes/images/logo/favicon.png
 // @downloadURL  https://update.greasyfork.org/scripts/544583/Siakang%20Dark%20Mode.user.js
 // @updateURL    https://update.greasyfork.org/scripts/544583/Siakang%20Dark%20Mode.meta.js
 // ==/UserScript==
@@ -46,6 +47,20 @@
             text-transform: uppercase !important;
             line-height: 1 !important;
             letter-spacing: 1px !important;
+        }
+
+        @media (max-width: 991.98px) {
+            .logo-box .logo-lg p {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                width: 0 !important;
+                height: 0 !important;
+                overflow: hidden !important;
+            }
+            .logo-box .logo-sm {
+                display: inline-block !important;
+            }
         }
 
         @media (min-width: 992px) {
@@ -218,14 +233,36 @@
     function manageSidebar() {
         const SIDEBAR_STATUS_KEY = 'siakang_sidebar_size';
         const body = document.body;
-        const savedStatus = localStorage.getItem(SIDEBAR_STATUS_KEY);
-        if (savedStatus) { body.setAttribute('data-leftbar-size', savedStatus); }
+        const isMobile = () => window.matchMedia("(max-width: 991.98px)").matches;
+
+        if (isMobile()) {
+            body.setAttribute('data-leftbar-size', 'default');
+        } else {
+            const savedStatus = localStorage.getItem(SIDEBAR_STATUS_KEY);
+            if (savedStatus) {
+                body.setAttribute('data-leftbar-size', savedStatus);
+            }
+        }
+
         const sidebarObserver = new MutationObserver(() => {
-            const currentSize = body.getAttribute('data-leftbar-size');
-            if (currentSize) { localStorage.setItem(SIDEBAR_STATUS_KEY, currentSize); }
+            if (isMobile()) {
+                if (body.getAttribute('data-leftbar-size') !== 'default') {
+                    body.setAttribute('data-leftbar-size', 'default');
+                }
+            } else {
+                const currentSize = body.getAttribute('data-leftbar-size');
+                if (currentSize) {
+                    localStorage.setItem(SIDEBAR_STATUS_KEY, currentSize);
+                }
+            }
         });
-        sidebarObserver.observe(body, { attributes: true, attributeFilter: ['data-leftbar-size'] });
+
+        sidebarObserver.observe(body, {
+            attributes: true,
+            attributeFilter: ['data-leftbar-size']
+        });
     }
+
     function redirectAfterLogin() {
         if (window.location.pathname === '/home') {
             window.location.href = 'https://siakang.untirta.ac.id/dashboard/dashboard-akademik';
