@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Siakang Dark Mode
 // @namespace    http://tampermonkey.net/
-// @version      4.1
+// @version      4.2
 // @description  Dark Mode untuk Siakang Untirta.
 // @author       Bitodette
 // @match        https://siakang.untirta.ac.id/*
@@ -128,6 +128,8 @@
         .col-lg-8.col-md-6 {padding-right: 9px !important;}
         .col-lg-8 {padding-right: 9px !important;}
         .row.g-4 > .col-md-6:first-child{padding-right: 9px !important;}
+        .row:has(.page-title-box) {margin-bottom: 0rem !important;}
+}
     `;
 
     const lightModeCss = `
@@ -183,6 +185,7 @@
         .col-lg-8.col-md-6 {padding-right: 9px !important;}
         .col-lg-8 {padding-right: 9px !important;}
         .row.g-4 > .col-md-6:first-child{padding-right: 9px !important;}
+        .row:has(.page-title-box) {margin-bottom: 0rem !important;}
     `;
 
     let darkModeStyleElement = null;
