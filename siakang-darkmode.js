@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Siakang Dark Mode
 // @namespace    http://tampermonkey.net/
-// @version      4.0
+// @version      4.1
 // @description  Dark Mode untuk Siakang Untirta.
 // @author       Bitodette
 // @match        https://siakang.untirta.ac.id/*
@@ -122,6 +122,12 @@
         .authentication-bg { background-color: ${darkPalette.primaryBg} !important; background-size: cover !important; background-position: center !important; min-height: 100vh !important; }
         .mt-5 { margin-top: 0 !important; margin-bottom: 0 !important; }
         .col-md-8.col-lg-6.col-xl-4 { margin-top: 4.5rem !important; }
+        .justify-content-end { justify-content: flex-start !important; }
+        .row.g-4{margin-top: calc(-1.3 * var(--ct-gutter-y)) !important;}
+        .row g-4.mb-4{margin-top: calc(-1.4 * var(--ct-gutter-y)) !important;}
+        .col-lg-8.col-md-6 {padding-right: 9px !important;}
+        .col-lg-8 {padding-right: 9px !important;}
+        .row.g-4 > .col-md-6:first-child{padding-right: 9px !important;}
     `;
 
     const lightModeCss = `
@@ -171,6 +177,12 @@
         .authentication-bg { background-color: ${lightPalette.primaryBg} !important; background-size: cover !important; background-position: center !important; min-height: 100vh !important; }
         .mt-5 { margin-top: 0 !important; margin-bottom: 0 !important; }
         .col-md-8.col-lg-6.col-xl-4 { margin-top: 4.5rem !important; }
+        .justify-content-end { justify-content: flex-start !important; }
+        .row.g-4{margin-top: calc(-1.3 * var(--ct-gutter-y)) !important;}
+        .row g-4.mb-4{margin-top: calc(-1.4 * var(--ct-gutter-y)) !important;}
+        .col-lg-8.col-md-6 {padding-right: 9px !important;}
+        .col-lg-8 {padding-right: 9px !important;}
+        .row.g-4 > .col-md-6:first-child{padding-right: 9px !important;}
     `;
 
     let darkModeStyleElement = null;
