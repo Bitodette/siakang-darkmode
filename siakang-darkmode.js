@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Siakang Dark Mode
 // @namespace    http://tampermonkey.net/
-// @version      4.2
+// @version      4.3
 // @description  Dark Mode untuk Siakang Untirta.
 // @author       Bitodette
 // @match        https://siakang.untirta.ac.id/*
@@ -16,7 +16,7 @@
     'use strict';
 
     const darkPalette = {
-        primaryBg: '#1e1e1e', secondaryBg: '#2d2d2d', tertiaryBg: '#3c3c3c',
+        primaryBg: '#1e1e1b', secondaryBg: '#2d2d2d', tertiaryBg: '#3c3c3c',
         primaryText: '#e0e0e0', secondaryText: '#a0a0a0', primaryBorder: '#555555',
         primaryAccent: '#02a8b5'
     };
@@ -47,6 +47,16 @@
             text-transform: uppercase !important;
             line-height: 1 !important;
             letter-spacing: 1px !important;
+        }
+
+        .modern-card, .modern-card:hover {
+            background: none !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .modern-card::before {
+            display: none !important;
         }
 
         @media (max-width: 991.98px) {
@@ -117,6 +127,8 @@
         .dataTables_wrapper .dataTables_paginate .paginate_button { background-color: ${darkPalette.secondaryBg} !important; border-color: ${darkPalette.primaryBorder} !important; }
         .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover { background-color: ${darkPalette.primaryAccent} !important; color: #fff !important; border-color: ${darkPalette.primaryAccent} !important; }
         .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current) { background-color: ${darkPalette.tertiaryBg} !important; }
+        .fc-event { background-color: ${darkPalette.primaryAccent} !important; border-color: ${darkPalette.primaryAccent} !important; }
+        .fc-event .fc-event-main, .fc-event .fc-event-main .fc-event-time, .fc-event .fc-event-main .fc-event-title { color: #ffffff !important; }
         @media (min-width: 992px) { .left-side-menu { position: fixed !important; height: 100vh !important; top: 70px !important; overflow-y: auto !important; } .content-page { transition: margin-left .2s !important; } body[data-leftbar-size='condensed'] .content-page { margin-left: 70px !important; } }
         @media (max-width: 991.98px) { .content-page { margin-left: 0 !important; } .left-side-menu { position: fixed !important; top: 70px !important; height: calc(100vh - 70px) !important; z-index: 1050 !important; } }
         .authentication-bg { background-color: ${darkPalette.primaryBg} !important; background-size: cover !important; background-position: center !important; min-height: 100vh !important; }
@@ -129,7 +141,6 @@
         .col-lg-8 {padding-right: 9px !important;}
         .row.g-4 > .col-md-6:first-child{padding-right: 9px !important;}
         .row:has(.page-title-box) {margin-bottom: 0rem !important;}
-}
     `;
 
     const lightModeCss = `
@@ -174,6 +185,13 @@
         .dataTables_wrapper .dataTables_paginate .paginate_button { background-color: ${lightPalette.secondaryBg} !important; border-color: ${lightPalette.primaryBorder} !important; }
         .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover { background-color: ${lightPalette.primaryAccent} !important; color: #fff !important; border-color: ${lightPalette.primaryAccent} !important; }
         .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current) { background-color: ${lightPalette.tertiaryBg} !important; }
+        .info-section span[style*="background"] {
+            background: ${lightPalette.tertiaryBg} !important;
+            color: ${lightPalette.primaryText} !important;
+        }
+        .detail-btn {
+            color: #ffffff !important;
+        }
         @media (min-width: 992px) { .left-side-menu { position: fixed !important; height: 100vh !important; top: 70px !important; overflow-y: auto !important; } .content-page { transition: margin-left .2s !important; } body[data-leftbar-size='condensed'] .content-page { margin-left: 70px !important; } }
         @media (max-width: 991.98px) { .content-page { margin-left: 0 !important; } .left-side-menu { position: fixed !important; top: 70px !important; height: calc(100vh - 70px) !important; z-index: 1050 !important; } }
         .authentication-bg { background-color: ${lightPalette.primaryBg} !important; background-size: cover !important; background-position: center !important; min-height: 100vh !important; }
@@ -207,6 +225,82 @@
 
     const darkModeMatcher = window.matchMedia('(prefers-color-scheme: dark)');
     darkModeMatcher.addEventListener('change', event => applyTheme(event.matches));
+
+    // =========================================================================
+    // === FUNGSI INI DIISI KEMBALI DENGAN KODE PENGURUTAN YANG SUDAH BENAR ===
+    // =========================================================================
+    function initScheduleSorter() {
+        const dayMap = { 'Senin': 1, 'Selasa': 2, 'Rabu': 3, 'Kamis': 4, 'Jumat': 5, 'Sabtu': 6, 'Minggu': 7 };
+        let lastSortedDay = null;
+
+        function sortScheduleCards() {
+            const today = new Date();
+            const todayDayNumber = today.getDay() === 0 ? 7 : today.getDay();
+            lastSortedDay = today.getDay();
+
+            const cardsContainer = document.querySelector('.row:has(.modern-card)');
+            if (!cardsContainer) return;
+
+            const cardColumns = Array.from(cardsContainer.querySelectorAll('.col-12.col-md-6.col-xl-4.mb-4'));
+            if (cardColumns.length === 0) return;
+
+            const cardsWithData = cardColumns.map(column => {
+                const timeEl = column.querySelector('.info-section .bi-clock');
+                if (!timeEl) return { element: column, sortOrder: 99, startTime: 9999 };
+                const text = timeEl.parentElement.textContent.trim();
+                const parts = text.split(/\s+/);
+                const dayName = parts[0];
+                const dayNumber = dayMap[dayName] || 8;
+                const startTimeText = parts[1];
+                const startTime = startTimeText ? parseInt(startTimeText.replace(':', ''), 10) : 9998;
+                const sortOrder = (dayNumber - todayDayNumber + 7) % 7;
+                return { element: column, sortOrder, startTime };
+            });
+
+            cardsWithData.sort((a, b) => {
+                if (a.sortOrder !== b.sortOrder) return a.sortOrder - b.sortOrder;
+                return a.startTime - b.startTime;
+            });
+
+            cardsWithData.forEach(item => cardsContainer.appendChild(item.element));
+        }
+
+        window.addEventListener('load', () => {
+            sortScheduleCards();
+            const observer = new MutationObserver(() => sortScheduleCards());
+            const livewireComponent = document.querySelector('div[wire\\:id]');
+            if (livewireComponent) {
+                observer.observe(livewireComponent, { childList: true, subtree: true });
+            }
+        });
+
+        setInterval(() => {
+            if (new Date().getDay() !== lastSortedDay) {
+                sortScheduleCards();
+            }
+        }, 60000);
+    }
+
+    function initViewPersistence() {
+        const VIEW_KEY = 'siakang_schedule_last_view';
+        const setupViewToggle = () => {
+            const listViewButton = document.querySelector("button[x-on\\:click*='card']");
+            const calendarViewButton = document.querySelector("button[x-on\\:click*='calendar']");
+            if (listViewButton && calendarViewButton) {
+                const savedView = localStorage.getItem(VIEW_KEY);
+                if (savedView === 'calendar' && !calendarViewButton.classList.contains('active')) {
+                    calendarViewButton.click();
+                }
+                listViewButton.addEventListener('click', () => localStorage.setItem(VIEW_KEY, 'card'));
+                calendarViewButton.addEventListener('click', () => localStorage.setItem(VIEW_KEY, 'calendar'));
+                return true;
+            }
+            return false;
+        };
+        window.addEventListener('load', () => {
+           setTimeout(setupViewToggle, 200);
+        });
+    }
 
     function highlightActiveSidebarLink() {
         setTimeout(() => {
@@ -242,6 +336,8 @@
         highlightActiveSidebarLink();
         if (window.location.href.includes('/jadwal_perkuliahan')) {
             forceListViewOnMobile();
+            initScheduleSorter();
+            initViewPersistence();
         }
     }
 
