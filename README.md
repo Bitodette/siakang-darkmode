@@ -11,6 +11,7 @@
   <p align="center">
     <a href="https://greasyfork.org/en/scripts/544583-siakang-dark-mode"><img src="https://img.shields.io/badge/GreasyFork-Install-green?style=for-the-badge&logo=tampermonkey" alt="Install from GreasyFork"></a>
     <a href="https://github.com/Bitodette/siakang-darkmode/graphs/contributors"><img src="https://img.shields.io/github/contributors/Bitodette/siakang-darkmode.svg?style=for-the-badge" alt="Contributors"></a>
+    <a href="https://greasyfork.org/en/scripts/544583-siakang-dark-mode"><img src="https://img.shields.io/greasyfork/dt/544583.svg?style=for-the-badge" alt="Total Installs"></a>
     <a href="https://github.com/Bitodette/siakang-darkmode/network/members"><img src="https://img.shields.io/github/forks/Bitodette/siakang-darkmode.svg?style=for-the-badge" alt="Forks"></a>
     <a href="https://github.com/Bitodette/siakang-darkmode/stargazers"><img src="https://img.shields.io/github/stars/Bitodette/siakang-darkmode.svg?style=for-the-badge" alt="Stargazers"></a>
   </p>
