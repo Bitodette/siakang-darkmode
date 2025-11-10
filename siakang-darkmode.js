@@ -1,15 +1,15 @@
 // ==UserScript==
 // @name         Siakang Dark Mode
 // @namespace    http://tampermonkey.net/
-// @version      4.3
+// @version      5.0
 // @description  Dark Mode untuk Siakang Untirta.
 // @author       Bitodette
 // @match        https://siakang.untirta.ac.id/*
 // @grant        GM_addStyle
 // @run-at       document-start
 // @icon         https://siakang.untirta.ac.id/myunnes/images/logo/favicon.png
-// @downloadURL  https://update.greasyfork.org/scripts/544583/Siakang%20Dark%20Mode.user.js
-// @updateURL    https://update.greasyfork.org/scripts/544583/Siakang%20Dark%20Mode.meta.js
+// @downloadURL https://update.greasyfork.org/scripts/544583/Siakang%20Dark%20Mode.user.js
+// @updateURL https://update.greasyfork.org/scripts/544583/Siakang%20Dark%20Mode.meta.js
 // ==/UserScript==
 
 (function() {
@@ -76,6 +76,12 @@
         @media (min-width: 992px) {
             .navbar-custom .nav-link.nav-user .rounded-circle.img-fill { display: none !important; }
         }
+
+        /* --- Menghapus border --- */
+        .border { border: none !important; }
+
+        /* --- Menghapus box-shadow tab-card --- */
+        .tab-card { box-shadow: none !important; }
     `;
 
     const darkModeCss = `
@@ -86,6 +92,10 @@
         .pro-user-name, .pro-user-name i, .nav-link, .dropdown-item { color: ${darkPalette.primaryText} !important; }
         .breadcrumb-item.active, .breadcrumb-item+.breadcrumb-item::before { color: ${darkPalette.secondaryText} !important; }
         .card, .card-body, .card-header, .modal-content, .dropdown-menu { background-color: ${darkPalette.secondaryBg} !important; color: ${darkPalette.primaryText} !important; border-color: ${darkPalette.primaryBorder} !important; border-radius: 12px !important; }
+
+        /* --- Background tab-card --- */
+        .tab-card { background: #202020 !important; }
+
         .row:has(.page-title-box) { margin-bottom: 0.5rem !important; }
         .info-card-custom, .password-card { box-shadow: none !important; transition: none !important; }
         .info-card-custom:hover, .password-card:hover { transform: none !important; }
@@ -227,7 +237,7 @@
     darkModeMatcher.addEventListener('change', event => applyTheme(event.matches));
 
     // =========================================================================
-    // === FUNGSI INI DIISI KEMBALI DENGAN KODE PENGURUTAN YANG SUDAH BENAR ===
+    // === FUNGSI PENGURUTAN JADWAL (DARI SCRIPT ANDA) ===
     // =========================================================================
     function initScheduleSorter() {
         const dayMap = { 'Senin': 1, 'Selasa': 2, 'Rabu': 3, 'Kamis': 4, 'Jumat': 5, 'Sabtu': 6, 'Minggu': 7 };
@@ -288,6 +298,9 @@
             const calendarViewButton = document.querySelector("button[x-on\\:click*='calendar']");
             if (listViewButton && calendarViewButton) {
                 const savedView = localStorage.getItem(VIEW_KEY);
+                if (savedView === 'card' && !listViewButton.classList.contains('active')) {
+                    listViewButton.click();
+                }
                 if (savedView === 'calendar' && !calendarViewButton.classList.contains('active')) {
                     calendarViewButton.click();
                 }
@@ -297,9 +310,7 @@
             }
             return false;
         };
-        window.addEventListener('load', () => {
-           setTimeout(setupViewToggle, 200);
-        });
+        setTimeout(setupViewToggle, 200);
     }
 
     function highlightActiveSidebarLink() {
@@ -326,20 +337,27 @@
             }
         }, 500);
     }
-
-    function initializeScript() {
-        GM_addStyle(permanentCss);
-        applyTheme(darkModeMatcher.matches);
-        manageSidebar();
+    function runPageSpecificScripts() {
         redirectAfterLogin();
-        modifyFooter();
         highlightActiveSidebarLink();
+
         if (window.location.href.includes('/jadwal_perkuliahan')) {
             forceListViewOnMobile();
             initScheduleSorter();
             initViewPersistence();
         }
     }
+    function initializeScript() {
+        GM_addStyle(permanentCss);
+        applyTheme(darkModeMatcher.matches);
+        manageSidebar();
+        modifyFooter();
+
+        runPageSpecificScripts();
+
+        document.addEventListener('livewire:navigated', runPageSpecificScripts);
+    }
+
 
     function manageSidebar() {
         const SIDEBAR_STATUS_KEY = 'siakang_sidebar_size';
@@ -408,5 +426,4 @@
             obs.disconnect();
         }
     }).observe(document.documentElement, { childList: true, subtree: true });
-
 })();
