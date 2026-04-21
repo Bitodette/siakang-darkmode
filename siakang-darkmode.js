@@ -1,15 +1,16 @@
 // ==UserScript==
 // @name         Siakang Dark Mode
 // @namespace    http://tampermonkey.net/
-// @version      6.0
-// @description  Dark Mode untuk Siakang Untirta.
+// @version      6.1
+// @description  Dark Mode untuk Siakang Untirta + Presensi via Upload Image.
 // @author       Bitodette
 // @match        https://siakang.untirta.ac.id/*
 // @grant        GM_addStyle
 // @run-at       document-start
 // @icon         https://siakang.untirta.ac.id/myunnes/images/logo/favicon.png
-// @downloadURL https://update.greasyfork.org/scripts/544583/Siakang%20Dark%20Mode.user.js
-// @updateURL https://update.greasyfork.org/scripts/544583/Siakang%20Dark%20Mode.meta.js
+// @downloadURL  https://update.greasyfork.org/scripts/544583/Siakang%20Dark%20Mode.user.js
+// @updateURL    https://update.greasyfork.org/scripts/544583/Siakang%20Dark%20Mode.meta.js
+// @require      https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js
 // ==/UserScript==
 
 (function() {
@@ -107,7 +108,7 @@
         a, a:hover { color: #fff !important; }
         .pro-user-name, .pro-user-name i, .nav-link, .dropdown-item { color: ${darkPalette.primaryText} !important; }
         .breadcrumb-item.active, .breadcrumb-item+.breadcrumb-item::before { color: ${darkPalette.secondaryText} !important; }
-        
+
         .card, .card-body, .card-header {
             background-color: ${darkPalette.secondaryBg} !important;
             color: ${darkPalette.primaryText} !important;
@@ -168,10 +169,10 @@
         .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current) { background-color: ${darkPalette.tertiaryBg} !important; }
         .fc-event { background-color: ${darkPalette.primaryAccent} !important; border-color: ${darkPalette.primaryAccent} !important; }
         .fc-event .fc-event-main, .fc-event .fc-event-main .fc-event-time, .fc-event .fc-event-main .fc-event-title { color: #ffffff !important; }
-        
+
         @media (min-width: 992px) { .left-side-menu { position: fixed !important; height: 100vh !important; top: 70px !important; overflow-y: auto !important; } .content-page { transition: margin-left .2s !important; } body[data-leftbar-size='condensed'] .content-page { margin-left: 70px !important; } }
         @media (max-width: 991.98px) { .content-page { margin-left: 0 !important; } .left-side-menu { position: fixed !important; top: 70px !important; height: calc(100vh - 70px) !important; z-index: 1050 !important; } }
-        
+
         .authentication-bg { background-color: ${darkPalette.primaryBg} !important; background-size: cover !important; background-position: center !important; min-height: 100vh !important; }
         .mt-5 { margin-top: 0 !important; margin-bottom: 0 !important; }
         .col-md-8.col-lg-6.col-xl-4 { margin-top: 4.5rem !important; }
@@ -476,7 +477,7 @@
         a:not(.nav-link):not(.dropdown-item):not([target="_blank"]) { color: ${lightPalette.linkText} !important; }
         .pro-user-name, .pro-user-name i, .nav-link, .dropdown-item, .user-box a, .user-box .dropdown-toggle { color: ${lightPalette.primaryText} !important; }
         .breadcrumb-item.active, .breadcrumb-item+.breadcrumb-item::before { color: ${lightPalette.secondaryText} !important; }
-        
+
         .card, .card-body, .card-header {
             background-color: ${lightPalette.secondaryBg} !important;
             color: ${lightPalette.primaryText} !important;
@@ -633,108 +634,108 @@
 
     // Schedule Sorting
     function initScheduleSorter() {
-	const DAY_MAP = { 'Senin': 1, 'Selasa': 2, 'Rabu': 3, 'Kamis': 4, 'Jumat': 5, 'Sabtu': 6, 'Minggu': 7 };
-	let lastSortedDay = null;
-	let _debounceTimer = null;
-	let observer = null;
+    const DAY_MAP = { 'Senin': 1, 'Selasa': 2, 'Rabu': 3, 'Kamis': 4, 'Jumat': 5, 'Sabtu': 6, 'Minggu': 7 };
+    let lastSortedDay = null;
+    let _debounceTimer = null;
+    let observer = null;
 
-	const debounce = (fn, ms = 120) => {
-		clearTimeout(_debounceTimer);
-		_debounceTimer = setTimeout(fn, ms);
-	};
+    const debounce = (fn, ms = 120) => {
+        clearTimeout(_debounceTimer);
+        _debounceTimer = setTimeout(fn, ms);
+    };
 
-	function findContainer() {
-		return document.querySelector('.row.g-3') ||
-		       document.querySelector('.row:has(.bi-clock)') ||
-		       Array.from(document.querySelectorAll('.row')).find(r => r.querySelector('.card .bi-clock')) ||
-		       null;
-	}
+    function findContainer() {
+        return document.querySelector('.row.g-3') ||
+               document.querySelector('.row:has(.bi-clock)') ||
+               Array.from(document.querySelectorAll('.row')).find(r => r.querySelector('.card .bi-clock')) ||
+               null;
+    }
 
-	function parseDayAndTime(text = '') {
-		const dayRe = /\b(Senin|Selasa|Rabu|Kamis|Jumat|Sabtu|Minggu)\b/i;
-		const timeRe = /([01]?\d|2[0-3])[:.]([0-5]\d)/;
-		const dayMatch = text.match(dayRe);
-		const timeMatch = text.match(timeRe);
-		if (!dayMatch) return null;
-		return {
-			day: dayMatch[1],
-			dayNum: DAY_MAP[dayMatch[1]] || 8,
-			startTime: timeMatch ? parseInt(timeMatch[1].padStart(2,'0') + timeMatch[2], 10) : 9999
-		};
-	}
+    function parseDayAndTime(text = '') {
+        const dayRe = /\b(Senin|Selasa|Rabu|Kamis|Jumat|Sabtu|Minggu)\b/i;
+        const timeRe = /([01]?\d|2[0-3])[:.]([0-5]\d)/;
+        const dayMatch = text.match(dayRe);
+        const timeMatch = text.match(timeRe);
+        if (!dayMatch) return null;
+        return {
+            day: dayMatch[1],
+            dayNum: DAY_MAP[dayMatch[1]] || 8,
+            startTime: timeMatch ? parseInt(timeMatch[1].padStart(2,'0') + timeMatch[2], 10) : 9999
+        };
+    }
 
-	function extractBestEntry(cardEl) {
-		const clockEls = Array.from(cardEl.querySelectorAll('.bi-clock'));
-		const today = new Date();
-		const todayNum = today.getDay() === 0 ? 7 : today.getDay();
-		let best = { sortOrder: 99, startTime: 9999 };
+    function extractBestEntry(cardEl) {
+        const clockEls = Array.from(cardEl.querySelectorAll('.bi-clock'));
+        const today = new Date();
+        const todayNum = today.getDay() === 0 ? 7 : today.getDay();
+        let best = { sortOrder: 99, startTime: 9999 };
 
-		clockEls.forEach(ce => {
-			const textContainer = ce.closest('span,div,li') || ce.parentElement;
-			if (!textContainer) return;
-			const txt = (textContainer.textContent || '').replace(/\s+/g, ' ').trim();
-			const parsed = parseDayAndTime(txt);
-			if (!parsed) return;
-			const sortOrder = (parsed.dayNum - todayNum + 7) % 7;
-			if (sortOrder < best.sortOrder || (sortOrder === best.sortOrder && parsed.startTime < best.startTime)) {
-				best = { sortOrder, startTime: parsed.startTime };
-			}
-		});
+        clockEls.forEach(ce => {
+            const textContainer = ce.closest('span,div,li') || ce.parentElement;
+            if (!textContainer) return;
+            const txt = (textContainer.textContent || '').replace(/\s+/g, ' ').trim();
+            const parsed = parseDayAndTime(txt);
+            if (!parsed) return;
+            const sortOrder = (parsed.dayNum - todayNum + 7) % 7;
+            if (sortOrder < best.sortOrder || (sortOrder === best.sortOrder && parsed.startTime < best.startTime)) {
+                best = { sortOrder, startTime: parsed.startTime };
+            }
+        });
 
-		return best;
-	}
+        return best;
+    }
 
-	function collectCardColumns(container) {
-		const cards = Array.from(container.querySelectorAll('.card')).map(card => card.closest('[class*="col-"]')).filter(Boolean);
-		return Array.from(new Set(cards));
-	}
+    function collectCardColumns(container) {
+        const cards = Array.from(container.querySelectorAll('.card')).map(card => card.closest('[class*="col-"]')).filter(Boolean);
+        return Array.from(new Set(cards));
+    }
 
-	function sortScheduleCards() {
-		const container = findContainer();
-		if (!container) return;
-		const cols = collectCardColumns(container);
-		if (!cols.length) return;
+    function sortScheduleCards() {
+        const container = findContainer();
+        if (!container) return;
+        const cols = collectCardColumns(container);
+        if (!cols.length) return;
 
-		const today = new Date();
-		lastSortedDay = today.getDay();
+        const today = new Date();
+        lastSortedDay = today.getDay();
 
-		const items = cols.map(col => {
-			const card = col.querySelector('.card') || col;
-			const best = extractBestEntry(card);
-			return { element: col, sortOrder: best.sortOrder, startTime: best.startTime };
-		});
+        const items = cols.map(col => {
+            const card = col.querySelector('.card') || col;
+            const best = extractBestEntry(card);
+            return { element: col, sortOrder: best.sortOrder, startTime: best.startTime };
+        });
 
-		items.sort((a, b) => {
-			if (a.sortOrder !== b.sortOrder) return a.sortOrder - b.sortOrder;
-			return a.startTime - b.startTime;
-		});
+        items.sort((a, b) => {
+            if (a.sortOrder !== b.sortOrder) return a.sortOrder - b.sortOrder;
+            return a.startTime - b.startTime;
+        });
 
-		items.forEach(it => container.appendChild(it.element));
-	}
+        items.forEach(it => container.appendChild(it.element));
+    }
 
-	function bindObserver() {
-		const container = findContainer();
-		if (!container) return;
-		if (observer) observer.disconnect();
-		observer = new MutationObserver(() => debounce(sortScheduleCards, 120));
-		observer.observe(container, { childList: true, subtree: true, attributes: false });
-	}
+    function bindObserver() {
+        const container = findContainer();
+        if (!container) return;
+        if (observer) observer.disconnect();
+        observer = new MutationObserver(() => debounce(sortScheduleCards, 120));
+        observer.observe(container, { childList: true, subtree: true, attributes: false });
+    }
 
-	window.addEventListener('load', () => {
-		debounce(() => {
-			sortScheduleCards();
-			bindObserver();
-		}, 80);
-	});
+    window.addEventListener('load', () => {
+        debounce(() => {
+            sortScheduleCards();
+            bindObserver();
+        }, 80);
+    });
 
-	setInterval(() => {
-		if (new Date().getDay() !== lastSortedDay) sortScheduleCards();
-	}, 60_000);
+    setInterval(() => {
+        if (new Date().getDay() !== lastSortedDay) sortScheduleCards();
+    }, 60_000);
 
-	debounce(() => {
-		sortScheduleCards();
-		bindObserver();
-	}, 200);
+    debounce(() => {
+        sortScheduleCards();
+        bindObserver();
+    }, 200);
 }
 
 function initViewPersistence() {
@@ -873,6 +874,111 @@ function initViewPersistence() {
         }
     }
 
+    // --- FITUR PRESENSI UPLOAD QR --- //
+    function initQRPresensi() {
+        const statusCardValue = document.getElementById('status-card-value');
+        // Jangan tampilkan tombol kalau sudah presensi
+        if (!statusCardValue || statusCardValue.innerText.trim().toLowerCase() === 'sudah') {
+            return;
+        }
+
+        const scanBtn = document.getElementById('btn-scan');
+        if (!scanBtn || document.getElementById('btn-upload-qr')) return;
+
+        // Ambil elemen parent dari tombol scan (biasanya bungkus div atau scan-action langsung)
+        const parentContainer = scanBtn.parentNode;
+
+        // Buat wrapper flexbox agar layout "justify-content-between" dari parent tidak rusak
+        const btnWrapper = document.createElement('div');
+        btnWrapper.className = 'd-flex gap-2';
+
+        // Pindahkan tombol scan asli ke dalam wrapper
+        parentContainer.insertBefore(btnWrapper, scanBtn);
+        btnWrapper.appendChild(scanBtn);
+
+        // Buat tombol Upload
+        const uploadBtn = document.createElement('button');
+        uploadBtn.id = 'btn-upload-qr';
+        uploadBtn.type = 'button';
+        uploadBtn.className = 'btn btn-warning btn-lg fw-semibold';
+        uploadBtn.innerHTML = '<i class="bi bi-file-earmark-image me-2"></i>Upload QR';
+
+        // Buat hidden input untuk file
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
+
+        uploadBtn.onclick = () => fileInput.click();
+        fileInput.onchange = (e) => {
+            if (e.target.files.length > 0) processQR(e.target.files[0]);
+        };
+
+        btnWrapper.appendChild(uploadBtn);
+        btnWrapper.appendChild(fileInput);
+    }
+
+    async function processQR(file) {
+        if (typeof jsQR !== 'function') {
+            alert('Library jsQR gagal dimuat. Coba refresh halaman.');
+            return;
+        }
+
+        const image = new Image();
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            image.onload = () => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d', { willReadFrequently: true });
+                canvas.width = image.width;
+                canvas.height = image.height;
+                context.drawImage(image, 0, 0, image.width, image.height);
+
+                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                if (code) {
+                    submitPresensi(code.data);
+                } else {
+                    alert("QR Code tidak terbaca. Pastikan gambarnya jelas!");
+                }
+            };
+            image.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function submitPresensi(token) {
+        const pelaksanaanId = document.getElementById('pelaksanaan-id')?.value;
+        const urlParams = new URLSearchParams(window.location.search);
+        const jadwalId = urlParams.get('jadwal_id');
+
+        // Ambil CSRF token dari halaman asli
+        const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+        fetch(`https://siakang.untirta.ac.id/presensi-mahasiswa/store?jadwal_id=${jadwalId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrf,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ token: token, pelaksanaan_kuliah_id: pelaksanaanId })
+        })
+        .then(r => r.json())
+        .then(json => {
+            if (json.success) {
+                alert("Berhasil! " + (json.message || 'Presensi tercatat.'));
+                location.reload(); // Refresh halaman agar UI berubah ke "Sudah"
+            } else {
+                alert("Gagal: " + (json.message || 'Token tidak valid.'));
+            }
+        })
+        .catch(err => alert("Error koneksi saat mengirim data."));
+    }
+    // ----------------------------- //
+
     function runPageSpecificScripts() {
         redirectAfterLogin();
         highlightActiveSidebarLink();
@@ -883,6 +989,11 @@ function initViewPersistence() {
             forceListViewOnMobile();
             initScheduleSorter();
             initViewPersistence();
+        }
+
+        // Hook fungsi QR Upload hanya di halaman presensi
+        if (window.location.href.includes('/presensi-mahasiswa')) {
+            setTimeout(initQRPresensi, 500); // delay dikit nunggu dom render sempurna
         }
     }
 
