@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Siakang Dark Mode
 // @namespace    http://tampermonkey.net/
-// @version      6.3.1
+// @version      7.0.0
 // @description  Dark Mode Siakang + Fix Firefox Dashboard N/A + QR Drag&Drop.
 // @author       Bitodette
 // @match        https://siakang.untirta.ac.id/*
